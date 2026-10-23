@@ -92,6 +92,10 @@ abstract class Reporter {
     err.writeln(ToolErrorMessages.fixFailedMessage(ruleName: ruleName, error: error));
   }
 
+  /// Called before the session validates every skill again because fixes
+  /// renamed at least one skill directory.
+  void onRecheckAfterRenames() {}
+
   /// Called when a skill directory is renamed on disk.
   void onSkillRenamed(String oldSkillName, String targetSkillName) {}
 

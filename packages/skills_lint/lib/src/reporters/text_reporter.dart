@@ -93,6 +93,13 @@ class TextReporter extends Reporter {
   }
 
   @override
+  void onRecheckAfterRenames() {
+    if (!quiet) {
+      out.writeln('Re-checking skills after directory renames:');
+    }
+  }
+
+  @override
   void onFixSkipped(String skillName, SkippedFix skipped) {
     if (quiet) {
       return;
