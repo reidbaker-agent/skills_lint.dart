@@ -31,7 +31,16 @@ import '../models/skill_rule.dart';
 import '../models/validation_error.dart';
 
 class MyNewRule extends SkillRule {
-  MyNewRule({super.severity});
+  MyNewRule({this.severity = defaultSeverity});
+
+  static const String ruleName = 'my-new-rule';
+  static const AnalysisSeverity defaultSeverity = AnalysisSeverity.error;
+
+  @override
+  String get name => ruleName;
+
+  @override
+  final AnalysisSeverity severity;
 
   @override
   Future<List<ValidationError>> validate(SkillContext context) async {

@@ -39,6 +39,10 @@ dev_dependencies:
   cognitive_complexity: ^2.0.1
   coverage: ^1.15.0
   dedupe: ^0.1.1
+  markdown_analyze:
+    git:
+      url: https://github.com/reidbaker-agent/markdown_analyze.git
+      ref: eef7206
   undead: ^0.1.2
 
 executables:
