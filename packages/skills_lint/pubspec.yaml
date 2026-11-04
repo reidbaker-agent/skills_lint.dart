@@ -41,6 +41,10 @@ dev_dependencies:
   dedupe: ^0.1.1
   undead: ^0.1.2
   markdown: ^7.3.1
+  markdown_analyze:
+    git:
+      url: https://github.com/reidbaker-agent/markdown_analyze.git
+      ref: eef7206
 
 executables:
   skills_lint:
