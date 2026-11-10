@@ -37,8 +37,8 @@ All SARIF locations in `skills_lint` use 1-based coordinates in accordance with 
 To ingest SARIF findings into GitHub Code Scanning, give the job `security-events: write` permission and add these steps:
 
 ```yaml
-# skills_lint exits non-zero (1 for findings, 78 for configuration errors).
-# continue-on-error lets the upload step run before the final step fails the job.
+# continue-on-error lets the upload step run after skills_lint fails, so Code
+# Scanning gets the report. The last step fails the job.
 - name: Run linter and generate SARIF
   id: lint
   continue-on-error: true
@@ -58,4 +58,6 @@ To ingest SARIF findings into GitHub Code Scanning, give the job `security-event
   run: exit 1
 ```
 
-> Note: Without the last step, `continue-on-error` makes the job pass even when the linter finds violations. This repository's [.github/workflows/code_scanning.yaml](../../../../.github/workflows/code_scanning.yaml) instead lets the lint step fail, uploads with `always()`, and reruns the linter in text format so the failing job's log shows the findings. It skips that rerun when the lint step exits with `78`, because configuration errors already print in the lint step's log.
+> Note: Without the last step, `continue-on-error` makes the job pass even when the linter finds violations.
+
+[.github/workflows/code_scanning.yaml](../../../../.github/workflows/code_scanning.yaml) in this repository lets the lint step fail the job, so that step's log shows configuration errors. It uploads the report with `always()` and reruns the linter in text format to print findings in the log. The rerun is skipped when the lint step exits with `78`, the configuration error code.

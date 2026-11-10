@@ -41,9 +41,9 @@ jobs:
         working-directory: packages/skills_lint
         run: dart pub get
 
-      # skills_lint exits with code 1 if lint violations are found and 78 if the
-      # configuration has errors, which fails this step. Configuration errors
-      # print to this step's log. The exit code is saved for Show findings.
+      # Fails on findings (exit code 1) and on configuration errors (exit code
+      # 78), which print in this step's log. Show findings reads the saved exit
+      # code so it doesn't print the configuration errors a second time.
       - name: Generate SARIF report
         id: lint
         run: dart run packages/skills_lint/bin/skills_lint.dart --format=sarif > skills-lint.sarif || { code=$?; echo "exit-code=$code" >> "$GITHUB_OUTPUT"; exit "$code"; }
@@ -58,8 +58,7 @@ jobs:
           sarif_file: skills-lint.sarif
           category: skills_lint
 
-      # With --format=sarif, findings go only to the SARIF file, so rerun in text format to print them in the log.
-      # Skip it after configuration errors (exit code 78), which the lint step already printed.
+      # The SARIF report holds the findings, so print them in text format for the log.
       - name: Show findings
         if: ${{ failure() && steps.lint.outcome == 'failure' && steps.lint.outputs.exit-code != '78' }}
         run: dart run packages/skills_lint/bin/skills_lint.dart
